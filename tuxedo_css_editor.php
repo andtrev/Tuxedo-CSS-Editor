@@ -87,7 +87,6 @@ class TuxedoCSSEditor {
 
 		add_action( 'customize_preview_init', array( $this, 'enqueue_customizer_preview_scripts' ) );
 		add_action( 'customize_controls_enqueue_scripts', array( $this, 'enqueue_customizer_control_scripts' ) );
-		add_action( 'customize_controls_print_styles', array( $this, 'print_control_css' ) );
 		add_action( 'customize_register', array( $this, 'register_customizer_settings_controls' ) );
 		add_action( 'wp_head', array( $this, 'output_compiled_css' ), PHP_INT_MAX );
 
@@ -115,15 +114,6 @@ class TuxedoCSSEditor {
 		wp_register_script( 'less', plugin_dir_url( __FILE__ ) . 'js/less/less.min.js', array( 'jquery' ), $this->version, true );
 		wp_register_script( 'sass', plugin_dir_url( __FILE__ ) . 'js/sass/sass.sync.js', array( 'jquery' ), $this->version, true );
 		wp_enqueue_script( 'tux-ace-editor', plugin_dir_url( __FILE__ ) . 'js/tuxedo_ace_editor.js', array( 'ace', 'less', 'sass' ), $this->version, true );
-
-	}
-
-	/**
-	 * Print css editor control styles.
-	 * 
-	 * @since 1.0.0
-	 */
-	public function print_control_css() {
 
 	}
 
