@@ -156,53 +156,5 @@
 			}
 		});
 
-	/*	var tuxmousex = null;
-		var tuxcustomizerwidth = 300;
-
-		$('#accordion-section-tux_css_editor_section .accordion-section-title').click(function(e){
-			tuxmousex = null;
-			$('#customize-controls').css('transition-duration', '0s');
-			$('#customize-controls').css('-webkit-transition-duration', '0s');
-			$('.wp-full-overlay').css('transition-duration', '0s');
-			$('.wp-full-overlay').css('-webkit-transition-duration', '0s');
-			$('#customize-controls').css('width', tuxcustomizerwidth + 'px');
-			$('.wp-full-overlay.expanded').css('margin-left', tuxcustomizerwidth + 'px');
-			$('#tux_css_resize').css('left', $('#tux_css_resize').position().left + (tuxcustomizerwidth - 300) + 'px');
-			$('#tux_css_resize').mousedown(function(e){
-				tuxmousex = e.pageX;
-			});
-			$('#tux_css_resize').mouseup(function(e){
-				tuxmousex = null;
-			});
-			$('#tux_css_resize').mouseout(function(e){
-				tuxmousex = null;
-			});
-			$('#tux_css_resize').mousemove(function(e){
-				if(tuxmousex == null){ return; }
-				var moveamountx = e.pageX - tuxmousex;
-				var tuxcssresizeleft = $('#tux_css_resize').position().left + moveamountx;
-				if(tuxcssresizeleft < 180){ tuxcssresizeleft = 180; }
-				$('#tux_css_resize').css('left', tuxcssresizeleft + 'px');
-				tuxcustomizerwidth = 300 + (tuxcssresizeleft - 180);
-				if(tuxcustomizerwidth < 300){ tuxcustomizerwidth = 300; }
-				$('#customize-controls').css('width', tuxcustomizerwidth + 'px');
-				$('.wp-full-overlay.expanded').css('margin-left', tuxcustomizerwidth + 'px');
-				tuxmousex = e.pageX;
-				tux_css_editor.resize();
-				e.preventDefault();
-			});
-		});
-
-		$('#accordion-section-tux_css_editor_section .customize-section-back').click(function(e){
-			$('#customize-controls').css('transition-duration', '');
-			$('#customize-controls').css('-webkit-transition-duration', '');
-			$('.wp-full-overlay').css('transition-duration', '');
-			$('.wp-full-overlay').css('-webkit-transition-duration', '');
-			$('#customize-controls').css('width', '');
-			$('.wp-full-overlay.expanded').css('margin-left', '');
-			$('#tux_css_resize').css('left', $('#tux_css_resize').position().left - (tuxcustomizerwidth - 300) + 'px');
-			if($('#tux_css_resize').position().left < 180){ $('#tux_css_resize').css('left', '180px'); }
-		});*/
-
 	});
 })(jQuery, window);
