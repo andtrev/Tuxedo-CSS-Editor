@@ -229,7 +229,7 @@ class TuxedoCSSEditor {
 			'settings' => 'tux_css_editor_compiler',
 			'section'  => 'tux_css_editor_options_section',
 			'type'     => 'select',
-			'choices'  => array( 'sass' => 'sass', 'less' => 'less' ),
+			'choices'  => array( 'scss' => 'sass', 'less' => 'less' ),
 		) );
 
 		$wp_customize->add_control( 'tux_css_editor_compress_control', array(

@@ -4,7 +4,7 @@ Contributors: andtrev
 Tags: customizer, css, sass, less, preview, live, customise  
 Requires at least: 3.4  
 Tested up to: 4.5  
-Stable tag: 1.0  
+Stable tag: 1.0.1  
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -30,6 +30,9 @@ Installation
 
 Changelog
 ---------
+
+### 1.0.1
+* Removed unused files from Ace, reducing overall plugin size by half.
 
 ### 1.0
 * Initial release.
