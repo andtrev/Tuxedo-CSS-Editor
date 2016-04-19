@@ -3,7 +3,7 @@
  * Plugin Name: Tuxedo CSS Editor
  * Plugin URI:  https://github.com/andtrev/Tuxedo-CSS-Editor
  * Description: Edit Sass and Less CSS live in the customizer.
- * Version:     1.0
+ * Version:     1.0.1
  * Author:      Trevor Anderson
  * Author URI:  https://github.com/andtrev
  * License:     GPLv2 or later
@@ -25,7 +25,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  * @package TuxedoCSSEditor
- * @version 1.0.0
+ * @version 1.0.1
  */
 
 /**
