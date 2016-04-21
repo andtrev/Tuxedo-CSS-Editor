@@ -3,7 +3,7 @@
  * Plugin Name: Tuxedo CSS Editor
  * Plugin URI:  https://github.com/andtrev/Tuxedo-CSS-Editor
  * Description: Edit Sass and Less CSS live in the customizer.
- * Version:     1.0.1
+ * Version:     1.1
  * Author:      Trevor Anderson
  * Author URI:  https://github.com/andtrev
  * License:     GPLv2 or later
@@ -25,7 +25,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * 
  * @package TuxedoCSSEditor
- * @version 1.0.1
+ * @version 1.1.0
  */
 
 /**
@@ -74,7 +74,7 @@ class TuxedoCSSEditor {
 	 * @since 1.0.0
 	 * @var string
 	 */
-	public $version = '1.0.0';
+	public $version = '1.1.0';
 
 	/**
 	 * Constructor.
@@ -113,7 +113,8 @@ class TuxedoCSSEditor {
 		wp_register_script( 'ace', plugin_dir_url( __FILE__ ) . 'js/ace/src-min-noconflict/ace.js', array( 'jquery' ), $this->version, true );
 		wp_register_script( 'less', plugin_dir_url( __FILE__ ) . 'js/less/less.min.js', array( 'jquery' ), $this->version, true );
 		wp_register_script( 'sass', plugin_dir_url( __FILE__ ) . 'js/sass/sass.sync.js', array( 'jquery' ), $this->version, true );
-		wp_enqueue_script( 'tux-ace-editor', plugin_dir_url( __FILE__ ) . 'js/tuxedo_ace_editor.js', array( 'ace', 'less', 'sass' ), $this->version, true );
+		wp_register_script( 'autoprefixer', plugin_dir_url( __FILE__ ) . 'js/autoprefixer/autoprefixer.js', array( 'jquery' ), $this->version, true );
+		wp_enqueue_script( 'tux-ace-editor', plugin_dir_url( __FILE__ ) . 'js/tuxedo_ace_editor.js', array( 'ace', 'less', 'sass', 'autoprefixer' ), $this->version, true );
 
 	}
 
@@ -125,14 +126,22 @@ class TuxedoCSSEditor {
 	 */
 	public function register_customizer_settings_controls( $wp_customize ) {
 
+		/** Load custom Ace editor control. */
 		tuxedo_css_editor_custom_controls();
 
+		/** Panels. */
 		$wp_customize->add_panel( 'tuxedo_css_editor_panel', array(
 			'title' => __( 'Tuxedo CSS Editor', 'tuxedo-css-editor' ),
 		) );
 
+		/** Sections. */
 		$wp_customize->add_section( 'tux_css_editor_section', array(
 			'title' => __( 'CSS Editor', 'tuxedo-css-editor' ),
+			'panel' => 'tuxedo_css_editor_panel',
+		) );
+
+		$wp_customize->add_section( 'tux_css_editor_compiled_section', array(
+			'title' => __( 'CSS Compiled', 'tuxedo-css-editor' ),
 			'panel' => 'tuxedo_css_editor_panel',
 		) );
 
@@ -141,6 +150,7 @@ class TuxedoCSSEditor {
 			'panel' => 'tuxedo_css_editor_panel',
 		) );
 
+		/** Settings. */
 		$wp_customize->add_setting( 'tux_css_editor_code', array(
 			'default'           => '',
 			'sanitize_callback' => '',
@@ -174,17 +184,17 @@ class TuxedoCSSEditor {
 		) );
 
 		$wp_customize->add_setting( 'tux_css_editor_compiler', array(
-			'default'           => 'sass',
+			'default'           => 'scss',
 			'sanitize_callback' => array( $this, 'sanitize' ),
 			'type'              => 'theme_mod',
 			'transport'         => 'postMessage',
 			'capability'        => 'edit_theme_options',
 		) );
 
-		$wp_customize->add_setting( 'tux_css_editor[compress]', array(
+		$wp_customize->add_setting( 'tux_css_editor_compress', array(
 			'default'           => '1',
 			'sanitize_callback' => array( $this, 'sanitize' ),
-			'type'              => 'option',
+			'type'              => 'theme_mod',
 			'transport'         => 'postMessage',
 			'capability'        => 'edit_theme_options',
 		) );
@@ -197,11 +207,60 @@ class TuxedoCSSEditor {
 			'capability'        => 'edit_theme_options',
 		) );
 
+		$wp_customize->add_setting( 'tux_css_editor_ap', array(
+			'default'           => '1',
+			'sanitize_callback' => array( $this, 'sanitize' ),
+			'type'              => 'theme_mod',
+			'transport'         => 'postMessage',
+			'capability'        => 'edit_theme_options',
+		) );
+
+		$wp_customize->add_setting( 'tux_css_editor_ap_browsers', array(
+			'default'           => '> 1%, last 2 versions',
+			'sanitize_callback' => '',
+			'type'              => 'theme_mod',
+			'transport'         => 'postMessage',
+			'capability'        => 'edit_theme_options',
+		) );
+
+		$wp_customize->add_setting( 'tux_css_editor_ap_cascade', array(
+			'default'           => '1',
+			'sanitize_callback' => array( $this, 'sanitize' ),
+			'type'              => 'theme_mod',
+			'transport'         => 'postMessage',
+			'capability'        => 'edit_theme_options',
+		) );
+
+		$wp_customize->add_setting( 'tux_css_editor_ap_add', array(
+			'default'           => '1',
+			'sanitize_callback' => array( $this, 'sanitize' ),
+			'type'              => 'theme_mod',
+			'transport'         => 'postMessage',
+			'capability'        => 'edit_theme_options',
+		) );
+
+		$wp_customize->add_setting( 'tux_css_editor_ap_remove', array(
+			'default'           => '1',
+			'sanitize_callback' => array( $this, 'sanitize' ),
+			'type'              => 'theme_mod',
+			'transport'         => 'postMessage',
+			'capability'        => 'edit_theme_options',
+		) );
+
+		/** Controls. */
 		$wp_customize->add_control( new Tuxedo_Customize_Ace_Editor_Control( $wp_customize, 'tux_ace_editor_control', array(
 			'label'    => '',
 			'settings' => 'tux_css_editor_code',
 			'section'  => 'tux_css_editor_section',
 		) ) );
+
+		$wp_customize->add_control( 'tux_css_editor_compiled_control', array(
+			'label'    => __( 'Compiled Output', 'tuxedo-css-editor' ),
+			'settings' => 'tux_css_editor_compiled',
+			'section'  => 'tux_css_editor_compiled_section',
+			'type'     => 'textarea',
+			''         => '',
+		) );
 
 		$wp_customize->add_control( 'tux_css_editor_theme_control', array(
 			'label'    => __( 'Editor Theme', 'tuxedo-css-editor' ),
@@ -234,7 +293,7 @@ class TuxedoCSSEditor {
 
 		$wp_customize->add_control( 'tux_css_editor_compress_control', array(
 			'label'    => __( 'Compress Output', 'tuxedo-css-editor' ),
-			'settings' => 'tux_css_editor[compress]',
+			'settings' => 'tux_css_editor_compress',
 			'section'  => 'tux_css_editor_options_section',
 			'type'     => 'checkbox',
 		) );
@@ -246,12 +305,39 @@ class TuxedoCSSEditor {
 			'type'     => 'checkbox',
 		) );
 
-		$wp_customize->add_control( 'tux_css_editor_compiled_control', array(
-			'label'    => __( 'Compiled Output', 'tuxedo-css-editor' ),
-			'settings' => 'tux_css_editor_compiled',
+		$wp_customize->add_control( 'tux_css_editor_ap_control', array(
+			'label'    => __( 'Enable Autoprefixer', 'tuxedo-css-editor' ),
+			'settings' => 'tux_css_editor_ap',
 			'section'  => 'tux_css_editor_options_section',
-			'type'     => 'textarea',
-			''         => '',
+			'type'     => 'checkbox',
+		) );
+
+		$wp_customize->add_control( 'tux_css_editor_ap_cascade_control', array(
+			'label'    => __( 'Use Visual Cascade, if CSS is uncompressed', 'tuxedo-css-editor' ),
+			'settings' => 'tux_css_editor_ap_cascade',
+			'section'  => 'tux_css_editor_options_section',
+			'type'     => 'checkbox',
+		) );
+
+		$wp_customize->add_control( 'tux_css_editor_ap_add_control', array(
+			'label'    => __( 'Add prefixes', 'tuxedo-css-editor' ),
+			'settings' => 'tux_css_editor_ap_add',
+			'section'  => 'tux_css_editor_options_section',
+			'type'     => 'checkbox',
+		) );
+
+		$wp_customize->add_control( 'tux_css_editor_ap_remove_control', array(
+			'label'    => __( 'Remove outdated prefixes', 'tuxedo-css-editor' ),
+			'settings' => 'tux_css_editor_ap_remove',
+			'section'  => 'tux_css_editor_options_section',
+			'type'     => 'checkbox',
+		) );
+
+		$wp_customize->add_control( 'tux_css_editor_ap_browsers_controls', array(
+			'label'    => __( 'Prefix these browsers', 'tuxedo-css-editor' ),
+			'settings' => 'tux_css_editor_ap_browsers',
+			'section'  => 'tux_css_editor_options_section',
+			'type'     => 'text',
 		) );
 
 	}
