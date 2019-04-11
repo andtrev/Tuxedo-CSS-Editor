@@ -408,6 +408,19 @@ function tuxedo_css_editor_custom_controls() {
 						left: 0;
 						z-index: 99999999;
 					}
+					#sub-accordion-section-tux_css_editor_section {
+					    height: 100% !important;
+					}
+					.expanded .wp-full-overlay-footer,
+					.wp-full-overlay-sidebar {
+						max-width: 100% !important;
+					}
+					.ace_print-margin {
+						display: none !important;
+					}
+					#tux_css_resize {
+						z-index: 999;
+					}
 				</style>
 				<label>
 					<span class="customize-control-title"><?php if ( ! empty( $this->label ) ) { echo esc_html( $this->label ); } ?></span>
